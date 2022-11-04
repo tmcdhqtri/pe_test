@@ -13,17 +13,17 @@ import "./index.css";
 
 const DescriptionRenderer = ({ field }) => <textarea {...field} />;
 
-let tasks = [
+let students = [
   {
     id: 1,
-    title: "Create an example",
-    description: "Create an example of how to use the component"
+    name: "Tran Manh Cuong",
+    description: "Student from class SE1604"
   },
   {
     id: 2,
-    title: "Improve",
-    description: "Improve the component!"
-  }
+    name: "Tran Van Nhan",
+    description: "Student from class SE1602"
+  },
 ];
 
 const SORTERS = {
@@ -52,31 +52,31 @@ const getSorter = data => {
   return sorter;
 };
 
-let count = tasks.length;
+let count = students.length;
 const service = {
   fetchItems: payload => {
-    let result = Array.from(tasks);
+    let result = Array.from(students);
     result = result.sort(getSorter(payload.sort));
     return Promise.resolve(result);
   },
-  create: task => {
+  create: student => {
     count += 1;
-    tasks.push({
-      ...task,
+    students.push({
+      ...student,
       id: count
     });
-    return Promise.resolve(task);
+    return Promise.resolve(student);
   },
   update: data => {
-    const task = tasks.find(t => t.id === data.id);
-    task.title = data.title;
-    task.description = data.description;
-    return Promise.resolve(task);
+    const student = students.find(t => t.id === data.id);
+    student.name = data.name;
+    student.description = data.description;
+    return Promise.resolve(student);
   },
   delete: data => {
-    const task = tasks.find(t => t.id === data.id);
-    tasks = tasks.filter(t => t.id !== task.id);
-    return Promise.resolve(task);
+    const student = students.find(t => t.id === data.id);
+    students = students.filter(t => t.id !== student.id);
+    return Promise.resolve(student);
   }
 };
 
@@ -87,12 +87,12 @@ const styles = {
 const Example = () => (
   <div style={styles.container}>
     <CRUDTable
-      caption="Tasks"
+      caption="Student List"
       fetchItems={payload => service.fetchItems(payload)}
     >
       <Fields>
-        <Field name="id" label="Id" hideInCreateForm />
-        <Field name="title" label="Title" placeholder="Title" />
+        <Field name="id" label="Id" hideInCreateForm  hideInUpdateForm/>
+        <Field name="name" label="Name" placeholder="Name" />
         <Field
           name="description"
           label="Description"
@@ -100,19 +100,19 @@ const Example = () => (
         />
       </Fields>
       <CreateForm
-        title="Task Creation"
-        message="Create a new task!"
-        trigger="Create Task"
-        onSubmit={task => service.create(task)}
+        name="Student Creation"
+        message="Create a new student!"
+        trigger="Create Student"
+        onSubmit={student => service.create(student)}
         submitText="Create"
         validate={values => {
           const errors = {};
-          if (!values.title) {
-            errors.title = "Please, provide task's title";
+          if (!values.name) {
+            errors.name = "Please, provide student's name";
           }
 
           if (!values.description) {
-            errors.description = "Please, provide task's description";
+            errors.description = "Please, provide student's description";
           }
 
           return errors;
@@ -120,24 +120,19 @@ const Example = () => (
       />
 
       <UpdateForm
-        title="Task Update Process"
-        message="Update task"
+        name="Student Update Process"
+        message="Update student"
         trigger="Update"
-        onSubmit={task => service.update(task)}
+        onSubmit={student => service.update(student)}
         submitText="Update"
         validate={values => {
           const errors = {};
-
-          if (!values.id) {
-            errors.id = "Please, provide id";
-          }
-
-          if (!values.title) {
-            errors.title = "Please, provide task's title";
+          if (!values.name) {
+            errors.name = "Please, provide student's name";
           }
 
           if (!values.description) {
-            errors.description = "Please, provide task's description";
+            errors.description = "Please, provide stundent's description";
           }
 
           return errors;
@@ -145,10 +140,10 @@ const Example = () => (
       />
 
       <DeleteForm
-        title="Task Delete Process"
-        message="Are you sure you want to delete the task?"
+        name="Student Delete Process"
+        message="Are you sure you want to delete student?"
         trigger="Delete"
-        onSubmit={task => service.delete(task)}
+        onSubmit={student => service.delete(student)}
         submitText="Delete"
         validate={values => {
           const errors = {};
